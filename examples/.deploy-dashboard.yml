@@ -1,0 +1,19 @@
+# Sample Deploy Dashboard Configuration
+# Copy this file and customize it for your organization.
+
+org: your-org
+
+environments:
+  - dev
+  - staging
+  - prod
+
+services:
+  - repo: order-service
+  - repo: payment-service
+  - repo: backend-monorepo
+    services:
+      - name: auth-module
+      - name: billing-module
+  - repo: gateway-api
+    display_name: API Gateway

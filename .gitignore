@@ -1,0 +1,4 @@
+node_modules/
+action/lib/
+*.tgz
+.DS_Store

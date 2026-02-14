@@ -1,0 +1,30 @@
+# Deploy Dashboard Configuration Reference
+# This file defines which services and environments the dashboard tracks.
+
+# GitHub organization or user that owns the repositories
+org: your-org
+
+# Environments in promotion order (left-to-right in the dashboard)
+environments:
+  - dev
+  - test
+  - staging
+  - prod
+
+# Services to track
+services:
+  # Simple: one service per repository (service name = repo name)
+  - repo: order-service
+  - repo: payment-service
+  - repo: user-service
+
+  # Mono-repo: multiple services deployed from a single repository.
+  # Each sub-service is tracked independently via deployment payload filtering.
+  - repo: backend-monorepo
+    services:
+      - name: auth-module
+      - name: billing-module
+
+  # Custom display name: override how the service appears in the dashboard
+  - repo: gateway-api
+    display_name: API Gateway

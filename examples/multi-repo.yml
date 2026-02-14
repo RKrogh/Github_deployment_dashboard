@@ -1,0 +1,53 @@
+# Example: Standard single-service repository
+# Add this as a step in your existing deploy workflow.
+# File: .github/workflows/deploy.yml (in your service repo)
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    permissions:
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+
+      # ... your deployment steps ...
+      - name: Deploy to staging
+        run: |
+          echo "Deploying to staging..."
+          # Your actual deploy command here
+
+      # Track the deployment in the dashboard
+      - name: Track deployment
+        uses: RobertKrogh/gh-deploy-dashboard/action@v1
+        with:
+          environment: staging
+          # service: defaults to this repo's name
+          # version: defaults to short SHA
+          # status: defaults to 'success'
+          # token: defaults to ${{ github.token }}
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production..."
+
+      - name: Track deployment
+        uses: RobertKrogh/gh-deploy-dashboard/action@v1
+        with:
+          environment: prod
+          version: ${{ github.sha }}
+          environment-url: https://my-service.example.com

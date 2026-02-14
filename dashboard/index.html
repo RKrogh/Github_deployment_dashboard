@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deploy Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #21262d;
+      --border: #30363d;
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --text-link: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --yellow: #d29922;
+      --orange: #db6d28;
+      --blue: #58a6ff;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* Setup Panel */
+    .setup-panel {
+      max-width: 540px;
+      margin: 80px auto;
+      padding: 32px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .setup-panel h1 {
+      font-size: 24px;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+    .form-group small {
+      display: block;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    input[type="text"], input[type="password"], input[type="url"], textarea, select {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 14px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-family: inherit;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.3);
+    }
+    textarea { resize: vertical; }
+
+    .tab-group {
+      display: flex;
+      gap: 0;
+      margin-bottom: 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .tab {
+      flex: 1;
+      padding: 6px 12px;
+      font-size: 13px;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .tab.active {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 8px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      background: #238636;
+      color: #fff;
+      border: 1px solid rgba(240, 246, 252, 0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-primary:hover { background: #2ea043; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-secondary {
+      display: inline-block;
+      padding: 6px 14px;
+      font-size: 13px;
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-secondary:hover { background: var(--border); }
+
+    .error-msg {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(248, 81, 73, 0.1);
+      border: 1px solid rgba(248, 81, 73, 0.4);
+      border-radius: 6px;
+      color: var(--red);
+      font-size: 13px;
+    }
+
+    .hidden { display: none !important; }
+
+    /* Dashboard */
+    .dashboard {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+    .dashboard header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .dashboard header h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .controls input[type="text"] { width: 200px; }
+    .controls select { width: auto; }
+
+    .refresh-info {
+      font-size: 12px;
+      color: var(--text-secondary);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    /* Matrix Table */
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      background: var(--bg-tertiary);
+      padding: 10px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(136, 149, 167, 0.04); }
+
+    td {
+      padding: 10px 16px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    td.service-name {
+      font-weight: 500;
+      min-width: 160px;
+    }
+    td.service-name .mono-label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* Deployment Cell */
+    .cell { min-width: 140px; }
+    .cell a {
+      color: var(--text-link);
+      text-decoration: none;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 13px;
+    }
+    .cell a:hover { text-decoration: underline; }
+    .cell .time {
+      display: block;
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    .cell .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .status-success { background: var(--green); }
+    .status-failure, .status-error { background: var(--red); }
+    .status-pending, .status-queued, .status-in_progress { background: var(--yellow); }
+    .status-inactive { background: var(--text-secondary); }
+    .status-unknown { background: var(--border); }
+
+    .cell--empty {
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    /* Drift */
+    tr.drift {
+      background: rgba(219, 109, 40, 0.06);
+    }
+    tr.drift td:first-child {
+      border-left: 3px solid var(--orange);
+    }
+    .drift-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--orange);
+      background: rgba(219, 109, 40, 0.15);
+      padding: 1px 6px;
+      border-radius: 10px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Skeleton loading */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--border) 50%, var(--bg-tertiary) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+      height: 14px;
+      margin-bottom: 4px;
+    }
+    .skeleton--sha { width: 70px; }
+    .skeleton--time { width: 50px; height: 10px; }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Error banner */
+    .error-banner {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(248, 81, 73, 0.1);
+      border: 1px solid rgba(248, 81, 73, 0.4);
+      border-radius: 6px;
+      color: var(--red);
+      font-size: 13px;
+    }
+    .error-banner .dismiss {
+      float: right;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 16px;
+      line-height: 1;
+      border: none;
+      background: none;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+    .empty-state h2 { font-size: 18px; margin-bottom: 8px; color: var(--text-primary); }
+  </style>
+</head>
+<body>
+<div id="app">
+  <!-- Setup Panel -->
+  <div id="setup" class="setup-panel">
+    <h1>Deploy Dashboard</h1>
+
+    <div class="form-group">
+      <label for="token-input">GitHub Token (PAT)</label>
+      <input type="password" id="token-input" placeholder="ghp_...">
+      <small>Stored in localStorage. Needs <code>repo</code> scope or fine-grained <code>deployments:read</code> on target repos.</small>
+    </div>
+
+    <div class="form-group">
+      <label>Configuration</label>
+      <div class="tab-group">
+        <button class="tab active" data-tab="url" id="tab-url">URL</button>
+        <button class="tab" data-tab="paste" id="tab-paste">Paste YAML</button>
+      </div>
+      <input type="url" id="config-url" placeholder="https://raw.githubusercontent.com/org/repo/main/.deploy-dashboard.yml">
+      <textarea id="config-yaml" class="hidden" rows="12" placeholder="org: your-org&#10;environments:&#10;  - dev&#10;  - staging&#10;  - prod&#10;services:&#10;  - repo: my-service"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="refresh-input">Refresh interval (seconds)</label>
+      <input type="text" id="refresh-input" value="60" style="width:80px">
+    </div>
+
+    <button id="btn-load" class="btn-primary">Load Dashboard</button>
+    <div id="setup-error" class="error-msg hidden"></div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="dashboard hidden">
+    <header>
+      <h1>Deploy Dashboard &mdash; <span id="org-name"></span></h1>
+      <div class="controls">
+        <input type="text" id="filter-input" placeholder="Filter services...">
+        <select id="sort-select">
+          <option value="config">Config order</option>
+          <option value="name">Name (A-Z)</option>
+          <option value="drift">Drift first</option>
+        </select>
+        <span id="refresh-countdown" class="refresh-info"></span>
+        <button id="btn-refresh" class="btn-secondary">Refresh</button>
+        <button id="btn-settings" class="btn-secondary">Settings</button>
+      </div>
+    </header>
+    <div id="table-container"></div>
+    <div id="error-container"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ============================================================
+  // STATE
+  // ============================================================
+  const state = {
+    token: localStorage.getItem('ghdd-token') || '',
+    configSource: localStorage.getItem('ghdd-config-source') || 'url',
+    configUrl: localStorage.getItem('ghdd-config-url') || '',
+    configYaml: localStorage.getItem('ghdd-config-yaml') || '',
+    refreshInterval: parseInt(localStorage.getItem('ghdd-refresh-interval') || '60', 10),
+    config: null,
+    deployments: new Map(),
+    loading: false,
+    errors: [],
+    filterText: '',
+    sortMode: 'config',
+    countdownSeconds: 0,
+    refreshTimer: null,
+  };
+
+  // ============================================================
+  // DOM REFS
+  // ============================================================
+  const $ = (sel) => document.querySelector(sel);
+  const setupEl = $('#setup');
+  const dashboardEl = $('#dashboard');
+  const tokenInput = $('#token-input');
+  const configUrlInput = $('#config-url');
+  const configYamlInput = $('#config-yaml');
+  const refreshInput = $('#refresh-input');
+  const tabUrl = $('#tab-url');
+  const tabPaste = $('#tab-paste');
+  const btnLoad = $('#btn-load');
+  const setupError = $('#setup-error');
+  const orgName = $('#org-name');
+  const filterInput = $('#filter-input');
+  const sortSelect = $('#sort-select');
+  const refreshCountdown = $('#refresh-countdown');
+  const btnRefresh = $('#btn-refresh');
+  const btnSettings = $('#btn-settings');
+  const tableContainer = $('#table-container');
+  const errorContainer = $('#error-container');
+
+  // ============================================================
+  // CONFIG PARSER
+  // ============================================================
+  function parseConfig(yamlText) {
+    const raw = jsyaml.load(yamlText);
+    if (!raw || !raw.org || !raw.environments || !raw.services) {
+      throw new Error('Config must include org, environments, and services.');
+    }
+
+    const config = {
+      org: raw.org,
+      environments: raw.environments,
+      services: [],
+    };
+
+    for (const entry of raw.services) {
+      if (!entry.repo) {
+        throw new Error('Each service entry must have a "repo" field.');
+      }
+
+      if (entry.services && Array.isArray(entry.services)) {
+        // Mono-repo: expand sub-services
+        for (const sub of entry.services) {
+          config.services.push({
+            key: entry.repo + '/' + sub.name,
+            displayName: sub.display_name || sub.name,
+            repo: entry.repo,
+            owner: raw.org,
+            monoRepoService: sub.name,
+          });
+        }
+      } else {
+        config.services.push({
+          key: entry.repo,
+          displayName: entry.display_name || entry.repo,
+          repo: entry.repo,
+          owner: raw.org,
+          monoRepoService: null,
+        });
+      }
+    }
+
+    return config;
+  }
+
+  // ============================================================
+  // GITHUB API
+  // ============================================================
+  async function apiFetch(url, token) {
+    const resp = await fetch(url, {
+      headers: {
+        Authorization: 'token ' + token,
+        Accept: 'application/vnd.github+json',
+      },
+    });
+    if (!resp.ok) {
+      const body = await resp.text().catch(() => '');
+      throw new Error('GitHub API ' + resp.status + ': ' + (body.slice(0, 200) || resp.statusText));
+    }
+    return resp.json();
+  }
+
+  async function fetchDeploymentForService(token, service, environment) {
+    const perPage = service.monoRepoService ? 30 : 5;
+    const url =
+      'https://api.github.com/repos/' +
+      encodeURIComponent(service.owner) + '/' +
+      encodeURIComponent(service.repo) +
+      '/deployments?environment=' + encodeURIComponent(environment) +
+      '&per_page=' + perPage;
+
+    let deployments;
+    try {
+      deployments = await apiFetch(url, token);
+    } catch (err) {
+      throw new Error(service.key + '/' + environment + ': ' + err.message);
+    }
+
+    // Find matching deployment
+    let deployment = null;
+    for (const d of deployments) {
+      if (service.monoRepoService) {
+        try {
+          const payload = typeof d.payload === 'string' ? JSON.parse(d.payload) : d.payload;
+          if (payload && payload.service === service.monoRepoService) {
+            deployment = d;
+            break;
+          }
+        } catch (_) {
+          continue;
+        }
+      } else {
+        deployment = d;
+        break;
+      }
+    }
+
+    if (!deployment) return null;
+
+    // Fetch latest status
+    let statusState = 'unknown';
+    let envUrl = null;
+    let statusDesc = deployment.description;
+    try {
+      const statusUrl =
+        'https://api.github.com/repos/' +
+        encodeURIComponent(service.owner) + '/' +
+        encodeURIComponent(service.repo) +
+        '/deployments/' + deployment.id + '/statuses?per_page=1';
+      const statuses = await apiFetch(statusUrl, token);
+      if (statuses.length > 0) {
+        statusState = statuses[0].state;
+        envUrl = statuses[0].environment_url || null;
+        statusDesc = statuses[0].description || statusDesc;
+      }
+    } catch (_) {
+      // Status fetch failed; proceed with unknown status
+    }
+
+    // Parse version from payload
+    let version = null;
+    try {
+      const payload = typeof deployment.payload === 'string'
+        ? JSON.parse(deployment.payload) : deployment.payload;
+      if (payload && payload.version) version = payload.version;
+    } catch (_) {}
+
+    return {
+      id: deployment.id,
+      sha: deployment.sha,
+      ref: deployment.ref,
+      environment: deployment.environment,
+      createdAt: deployment.created_at,
+      status: statusState,
+      environmentUrl: envUrl,
+      description: statusDesc,
+      version: version,
+      repoOwner: service.owner,
+      repoName: service.repo,
+    };
+  }
+
+  async function fetchAllDeployments(token, config) {
+    const tasks = [];
+    for (const service of config.services) {
+      for (const env of config.environments) {
+        tasks.push({ service, env });
+      }
+    }
+
+    const results = new Map();
+    const errors = [];
+    const CONCURRENCY = 6;
+
+    for (let i = 0; i < tasks.length; i += CONCURRENCY) {
+      const batch = tasks.slice(i, i + CONCURRENCY);
+      const settled = await Promise.allSettled(
+        batch.map(({ service, env }) =>
+          fetchDeploymentForService(token, service, env).then((data) => ({
+            key: service.key,
+            env,
+            data,
+          }))
+        )
+      );
+
+      for (const result of settled) {
+        if (result.status === 'fulfilled' && result.value.data) {
+          const { key, env, data } = result.value;
+          if (!results.has(key)) results.set(key, new Map());
+          results.get(key).set(env, data);
+        } else if (result.status === 'rejected') {
+          errors.push(result.reason.message || 'Unknown fetch error');
+        }
+      }
+    }
+
+    return { results, errors };
+  }
+
+  // ============================================================
+  // DRIFT DETECTION
+  // ============================================================
+  function detectDrift(serviceDeployments, environments) {
+    if (!serviceDeployments || serviceDeployments.size < 2) {
+      return { hasDrift: false };
+    }
+
+    let firstSha = null;
+    let lastSha = null;
+    let firstEnv = null;
+    let lastEnv = null;
+
+    for (const env of environments) {
+      const dep = serviceDeployments.get(env);
+      if (dep && dep.status === 'success') {
+        if (firstSha === null) {
+          firstSha = dep.sha;
+          firstEnv = env;
+        }
+        lastSha = dep.sha;
+        lastEnv = env;
+      }
+    }
+
+    if (!firstSha || !lastSha || firstEnv === lastEnv) {
+      return { hasDrift: false };
+    }
+
+    return {
+      hasDrift: firstSha !== lastSha,
+      firstEnv,
+      lastEnv,
+      firstSha: firstSha.substring(0, 7),
+      lastSha: lastSha.substring(0, 7),
+    };
+  }
+
+  // ============================================================
+  // RENDERING
+  // ============================================================
+  function relativeTime(isoString) {
+    const diff = Date.now() - new Date(isoString).getTime();
+    const seconds = Math.floor(diff / 1000);
+    if (seconds < 60) return 'just now';
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return minutes + 'm ago';
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return hours + 'h ago';
+    const days = Math.floor(hours / 24);
+    if (days < 30) return days + 'd ago';
+    return new Date(isoString).toLocaleDateString();
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function renderTable(config, deployments) {
+    let services = [...config.services];
+
+    // Filter
+    if (state.filterText) {
+      const q = state.filterText.toLowerCase();
+      services = services.filter(
+        (s) =>
+          s.displayName.toLowerCase().includes(q) ||
+          s.key.toLowerCase().includes(q)
+      );
+    }
+
+    // Compute drift for each service
+    const driftMap = new Map();
+    for (const s of services) {
+      driftMap.set(s.key, detectDrift(deployments.get(s.key), config.environments));
+    }
+
+    // Sort
+    if (state.sortMode === 'name') {
+      services.sort((a, b) => a.displayName.localeCompare(b.displayName));
+    } else if (state.sortMode === 'drift') {
+      services.sort((a, b) => {
+        const da = driftMap.get(a.key).hasDrift ? 0 : 1;
+        const db = driftMap.get(b.key).hasDrift ? 0 : 1;
+        return da - db || a.displayName.localeCompare(b.displayName);
+      });
+    }
+
+    if (services.length === 0) {
+      tableContainer.innerHTML =
+        '<div class="empty-state"><h2>No services found</h2><p>Check your config or filter.</p></div>';
+      return;
+    }
+
+    let html = '<div class="table-container"><table><thead><tr><th>Service</th>';
+    for (const env of config.environments) {
+      html += '<th>' + escapeHtml(env) + '</th>';
+    }
+    html += '</tr></thead><tbody>';
+
+    for (const service of services) {
+      const drift = driftMap.get(service.key);
+      html += '<tr' + (drift.hasDrift ? ' class="drift"' : '') + '>';
+
+      // Service name cell
+      html += '<td class="service-name">';
+      html += escapeHtml(service.displayName);
+      if (drift.hasDrift) {
+        html += '<span class="drift-badge">drift</span>';
+      }
+      if (service.monoRepoService) {
+        html += '<span class="mono-label">' + escapeHtml(service.repo) + '</span>';
+      }
+      html += '</td>';
+
+      // Environment cells
+      for (const env of config.environments) {
+        const deps = deployments.get(service.key);
+        const dep = deps ? deps.get(env) : null;
+
+        if (state.loading && !dep) {
+          html += '<td class="cell"><div class="skeleton skeleton--sha"></div><div class="skeleton skeleton--time"></div></td>';
+        } else if (dep) {
+          const shortSha = dep.sha.substring(0, 7);
+          const commitUrl =
+            'https://github.com/' + dep.repoOwner + '/' + dep.repoName + '/commit/' + dep.sha;
+          const displayVersion = dep.version && dep.version !== shortSha ? dep.version : null;
+
+          html += '<td class="cell">';
+          html += '<span class="status-dot status-' + dep.status + '"></span>';
+          html += '<a href="' + commitUrl + '" target="_blank" rel="noopener" title="' + dep.sha + '">';
+          html += displayVersion ? escapeHtml(displayVersion) : shortSha;
+          html += '</a>';
+          html += '<span class="time" title="' + dep.createdAt + '">' + relativeTime(dep.createdAt) + '</span>';
+          html += '</td>';
+        } else {
+          html += '<td class="cell cell--empty">&mdash;</td>';
+        }
+      }
+
+      html += '</tr>';
+    }
+
+    html += '</tbody></table></div>';
+    tableContainer.innerHTML = html;
+  }
+
+  function renderErrors(errors) {
+    if (!errors.length) {
+      errorContainer.innerHTML = '';
+      return;
+    }
+    // Deduplicate and show max 5
+    const unique = [...new Set(errors)].slice(0, 5);
+    let html = '';
+    for (const msg of unique) {
+      html +=
+        '<div class="error-banner">' +
+        '<button class="dismiss" onclick="this.parentElement.remove()">&times;</button>' +
+        escapeHtml(msg) +
+        '</div>';
+    }
+    errorContainer.innerHTML = html;
+  }
+
+  // ============================================================
+  // CONTROLLER
+  // ============================================================
+  function showSetup() {
+    setupEl.classList.remove('hidden');
+    dashboardEl.classList.add('hidden');
+    stopAutoRefresh();
+
+    tokenInput.value = state.token;
+    configUrlInput.value = state.configUrl;
+    configYamlInput.value = state.configYaml;
+    refreshInput.value = state.refreshInterval;
+
+    if (state.configSource === 'paste') {
+      tabPaste.classList.add('active');
+      tabUrl.classList.remove('active');
+      configUrlInput.classList.add('hidden');
+      configYamlInput.classList.remove('hidden');
+    } else {
+      tabUrl.classList.add('active');
+      tabPaste.classList.remove('active');
+      configYamlInput.classList.add('hidden');
+      configUrlInput.classList.remove('hidden');
+    }
+  }
+
+  function showDashboard() {
+    setupEl.classList.add('hidden');
+    dashboardEl.classList.remove('hidden');
+  }
+
+  async function loadConfig() {
+    state.token = tokenInput.value.trim();
+    state.configUrl = configUrlInput.value.trim();
+    state.configYaml = configYamlInput.value.trim();
+    state.refreshInterval = Math.max(10, parseInt(refreshInput.value, 10) || 60);
+
+    if (!state.token) {
+      showError('Please enter a GitHub token.');
+      return;
+    }
+
+    const useUrl = state.configSource === 'url';
+    let yamlText = '';
+
+    if (useUrl) {
+      if (!state.configUrl) {
+        showError('Please enter a config URL.');
+        return;
+      }
+      try {
+        btnLoad.disabled = true;
+        btnLoad.textContent = 'Loading...';
+        const resp = await fetch(state.configUrl);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        yamlText = await resp.text();
+      } catch (err) {
+        showError('Failed to fetch config: ' + err.message);
+        btnLoad.disabled = false;
+        btnLoad.textContent = 'Load Dashboard';
+        return;
+      }
+    } else {
+      yamlText = state.configYaml;
+      if (!yamlText) {
+        showError('Please paste your YAML config.');
+        return;
+      }
+    }
+
+    try {
+      state.config = parseConfig(yamlText);
+    } catch (err) {
+      showError('Invalid config: ' + err.message);
+      btnLoad.disabled = false;
+      btnLoad.textContent = 'Load Dashboard';
+      return;
+    }
+
+    // Persist settings
+    localStorage.setItem('ghdd-token', state.token);
+    localStorage.setItem('ghdd-config-source', state.configSource);
+    localStorage.setItem('ghdd-config-url', state.configUrl);
+    localStorage.setItem('ghdd-config-yaml', useUrl ? yamlText : state.configYaml);
+    localStorage.setItem('ghdd-refresh-interval', String(state.refreshInterval));
+
+    btnLoad.disabled = false;
+    btnLoad.textContent = 'Load Dashboard';
+    hideError();
+
+    orgName.textContent = state.config.org;
+    showDashboard();
+    await refresh();
+    startAutoRefresh();
+  }
+
+  async function refresh() {
+    if (!state.config) return;
+    state.loading = true;
+    state.errors = [];
+    renderTable(state.config, state.deployments);
+
+    const { results, errors } = await fetchAllDeployments(state.token, state.config);
+    state.deployments = results;
+    state.loading = false;
+    state.errors = errors;
+
+    renderTable(state.config, state.deployments);
+    renderErrors(state.errors);
+  }
+
+  function startAutoRefresh() {
+    stopAutoRefresh();
+    state.countdownSeconds = state.refreshInterval;
+    refreshCountdown.textContent = state.countdownSeconds + 's';
+
+    state.refreshTimer = setInterval(function () {
+      state.countdownSeconds--;
+      if (state.countdownSeconds <= 0) {
+        refresh();
+        state.countdownSeconds = state.refreshInterval;
+      }
+      refreshCountdown.textContent = state.countdownSeconds + 's';
+    }, 1000);
+  }
+
+  function stopAutoRefresh() {
+    if (state.refreshTimer) {
+      clearInterval(state.refreshTimer);
+      state.refreshTimer = null;
+    }
+    refreshCountdown.textContent = '';
+  }
+
+  function showError(msg) {
+    setupError.textContent = msg;
+    setupError.classList.remove('hidden');
+  }
+
+  function hideError() {
+    setupError.classList.add('hidden');
+  }
+
+  // ============================================================
+  // EVENT LISTENERS
+  // ============================================================
+  tabUrl.addEventListener('click', function () {
+    state.configSource = 'url';
+    tabUrl.classList.add('active');
+    tabPaste.classList.remove('active');
+    configUrlInput.classList.remove('hidden');
+    configYamlInput.classList.add('hidden');
+  });
+
+  tabPaste.addEventListener('click', function () {
+    state.configSource = 'paste';
+    tabPaste.classList.add('active');
+    tabUrl.classList.remove('active');
+    configYamlInput.classList.remove('hidden');
+    configUrlInput.classList.add('hidden');
+  });
+
+  btnLoad.addEventListener('click', loadConfig);
+
+  btnRefresh.addEventListener('click', function () {
+    refresh();
+    state.countdownSeconds = state.refreshInterval;
+  });
+
+  btnSettings.addEventListener('click', showSetup);
+
+  filterInput.addEventListener('input', function () {
+    state.filterText = filterInput.value;
+    if (state.config) renderTable(state.config, state.deployments);
+  });
+
+  sortSelect.addEventListener('change', function () {
+    state.sortMode = sortSelect.value;
+    if (state.config) renderTable(state.config, state.deployments);
+  });
+
+  // ============================================================
+  // INIT
+  // ============================================================
+  (function init() {
+    // If we have saved settings, try to auto-load
+    if (state.token && (state.configUrl || state.configYaml)) {
+      const yamlText = state.configYaml;
+      if (yamlText) {
+        try {
+          state.config = parseConfig(yamlText);
+          orgName.textContent = state.config.org;
+          showDashboard();
+          refresh();
+          startAutoRefresh();
+          return;
+        } catch (_) {
+          // Fall through to setup
+        }
+      }
+    }
+    showSetup();
+  })();
+})();
+</script>
+</body>
+</html>

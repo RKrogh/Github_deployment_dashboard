@@ -1,0 +1,44 @@
+name: 'Deploy Dashboard Tracker'
+description: 'Track deployments via the GitHub Deployments API for the deploy dashboard'
+author: 'RobertKrogh'
+
+branding:
+  icon: 'upload-cloud'
+  color: 'blue'
+
+inputs:
+  environment:
+    description: 'Target environment name (e.g., dev, staging, prod)'
+    required: true
+  service:
+    description: 'Service name for mono-repo support. Defaults to the repository name.'
+    required: false
+  version:
+    description: 'Version string. Defaults to the short SHA of the current commit.'
+    required: false
+  status:
+    description: 'Deployment status. One of: success, failure, error, inactive, in_progress, queued, pending.'
+    required: false
+    default: 'success'
+  environment-url:
+    description: 'URL to the deployed environment.'
+    required: false
+  description:
+    description: 'Free-form description of the deployment.'
+    required: false
+  token:
+    description: 'GitHub token for API authentication.'
+    required: true
+    default: '${{ github.token }}'
+
+outputs:
+  deployment-id:
+    description: 'The ID of the created GitHub deployment'
+  service:
+    description: 'The resolved service name'
+  version:
+    description: 'The resolved version string'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

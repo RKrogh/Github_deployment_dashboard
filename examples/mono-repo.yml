@@ -1,0 +1,69 @@
+# Example: Mono-repo with multiple services
+# The `service` input tags each deployment so the dashboard can tell them apart.
+# File: .github/workflows/deploy.yml (in your mono-repo)
+
+name: Deploy Services
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/auth-module/**'
+      - 'services/billing-module/**'
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      auth: ${{ steps.filter.outputs.auth }}
+      billing: ${{ steps.filter.outputs.billing }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            auth:
+              - 'services/auth-module/**'
+            billing:
+              - 'services/billing-module/**'
+
+  deploy-auth:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.auth == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy auth-module
+        run: |
+          echo "Deploying auth-module..."
+
+      - name: Track auth-module deployment
+        uses: RobertKrogh/gh-deploy-dashboard/action@v1
+        with:
+          environment: staging
+          service: auth-module
+          version: v1.2.3
+
+  deploy-billing:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.billing == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy billing-module
+        run: |
+          echo "Deploying billing-module..."
+
+      - name: Track billing-module deployment
+        uses: RobertKrogh/gh-deploy-dashboard/action@v1
+        with:
+          environment: staging
+          service: billing-module
+          version: v2.0.0
