@@ -42,7 +42,7 @@ jobs:
           echo "Deploying auth-module..."
 
       - name: Track auth-module deployment
-        uses: RobertKrogh/gh-deploy-dashboard/action@v1
+        uses: RKrogh/Github_deployment_dashboard/action@main
         with:
           environment: staging
           service: auth-module
@@ -62,7 +62,7 @@ jobs:
           echo "Deploying billing-module..."
 
       - name: Track billing-module deployment
-        uses: RobertKrogh/gh-deploy-dashboard/action@v1
+        uses: RKrogh/Github_deployment_dashboard/action@main
         with:
           environment: staging
           service: billing-module

@@ -24,7 +24,7 @@ jobs:
 
       # Track the deployment in the dashboard
       - name: Track deployment
-        uses: RobertKrogh/gh-deploy-dashboard/action@v1
+        uses: RKrogh/Github_deployment_dashboard/action@main
         with:
           environment: staging
           # service: defaults to this repo's name
@@ -46,7 +46,7 @@ jobs:
           echo "Deploying to production..."
 
       - name: Track deployment
-        uses: RobertKrogh/gh-deploy-dashboard/action@v1
+        uses: RKrogh/Github_deployment_dashboard/action@main
         with:
           environment: prod
           version: ${{ github.sha }}

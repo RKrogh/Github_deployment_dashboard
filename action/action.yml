@@ -1,6 +1,6 @@
 name: 'Deploy Dashboard Tracker'
 description: 'Track deployments via the GitHub Deployments API for the deploy dashboard'
-author: 'RobertKrogh'
+author: 'RKrogh'
 
 branding:
   icon: 'upload-cloud'
