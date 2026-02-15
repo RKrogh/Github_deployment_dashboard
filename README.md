@@ -25,7 +25,7 @@ jobs:
 
       # ... your deploy steps ...
 
-      - uses: RobertKrogh/gh-deploy-dashboard/action@v1
+      - uses: RKrogh/Github_deployment_dashboard/action@main
         with:
           environment: staging
 ```
@@ -137,7 +137,7 @@ For mono-repos where multiple services are deployed from a single repository:
 1. **In your workflow**, set the `service` input to differentiate deployments:
 
    ```yaml
-   - uses: RobertKrogh/gh-deploy-dashboard/action@v1
+   - uses: RKrogh/Github_deployment_dashboard/action@main
      with:
        environment: staging
        service: auth-module # Tags this deployment
