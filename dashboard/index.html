@@ -315,6 +315,47 @@
       background: none;
     }
 
+    /* Summary bar */
+    .summary-bar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding: 10px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .summary-bar .stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .summary-bar .stat-value {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .summary-bar .stat-value--drift {
+      color: var(--orange);
+    }
+    .summary-bar .stat-value--ok {
+      color: var(--green);
+    }
+
+    /* Env URL link */
+    .cell .env-link {
+      display: inline-block;
+      margin-left: 4px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 11px;
+      vertical-align: middle;
+    }
+    .cell .env-link:hover {
+      color: var(--text-link);
+    }
+
     /* Empty state */
     .empty-state {
       text-align: center;
@@ -371,6 +412,7 @@
         <button id="btn-settings" class="btn-secondary">Settings</button>
       </div>
     </header>
+    <div id="summary-bar" class="summary-bar hidden"></div>
     <div id="table-container"></div>
     <div id="error-container"></div>
   </div>
@@ -420,6 +462,7 @@
   const refreshCountdown = $('#refresh-countdown');
   const btnRefresh = $('#btn-refresh');
   const btnSettings = $('#btn-settings');
+  const summaryBar = $('#summary-bar');
   const tableContainer = $('#table-container');
   const errorContainer = $('#error-container');
 
@@ -725,6 +768,42 @@
     return d.innerHTML;
   }
 
+  function renderSummary(config, deployments) {
+    const total = config.services.length;
+    let driftCount = 0;
+    let failCount = 0;
+
+    for (const service of config.services) {
+      const deps = deployments.get(service.key);
+      const drift = detectDrift(deps, config.environments);
+      if (drift.hasDrift) driftCount++;
+      if (deps) {
+        for (const [, dep] of deps) {
+          if (dep.status === 'failure' || dep.status === 'error') { failCount++; break; }
+        }
+      }
+    }
+
+    if (total === 0) {
+      summaryBar.classList.add('hidden');
+      return;
+    }
+
+    const okCount = total - driftCount;
+    let html = '<span class="stat"><span class="stat-value">' + total + '</span> services</span>';
+
+    if (driftCount > 0) {
+      html += '<span class="stat"><span class="stat-value stat-value--drift">' + driftCount + '</span> drifted</span>';
+    }
+    html += '<span class="stat"><span class="stat-value stat-value--ok">' + okCount + '</span> in sync</span>';
+    if (failCount > 0) {
+      html += '<span class="stat"><span class="stat-value" style="color:var(--red)">' + failCount + '</span> with failures</span>';
+    }
+
+    summaryBar.innerHTML = html;
+    summaryBar.classList.remove('hidden');
+  }
+
   function renderTable(config, deployments) {
     let services = [...config.services];
 
@@ -805,6 +884,9 @@
           html += '<a href="' + commitUrl + '" target="_blank" rel="noopener" title="' + dep.sha + '">';
           html += displayVersion ? escapeHtml(displayVersion) : shortSha;
           html += '</a>';
+          if (dep.environmentUrl) {
+            html += '<a href="' + escapeHtml(dep.environmentUrl) + '" target="_blank" rel="noopener" class="env-link" title="Open environment">&#x2197;</a>';
+          }
           html += '<span class="time" title="' + dep.createdAt + '">' + relativeTime(dep.createdAt) + '</span>';
           html += '</td>';
         } else {
@@ -945,6 +1027,7 @@
     state.errors = errors;
 
     renderTable(state.config, state.deployments);
+    renderSummary(state.config, state.deployments);
     renderErrors(state.errors);
 
     // Fetch commit distance for drifted services (non-blocking update)
