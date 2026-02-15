@@ -1,5 +1,7 @@
 # gh-deploy-dashboard
 
+<img width="1380" height="209" alt="image" src="https://github.com/user-attachments/assets/d9b4573c-a0ff-4979-8630-60fc91b3cb8c" />
+
 A cross-repository deployment dashboard for GitHub. See which commit of each service is deployed to which environment, with drift detection.
 
 Two components:
