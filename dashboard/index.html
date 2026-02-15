@@ -391,6 +391,7 @@
     refreshInterval: parseInt(localStorage.getItem('ghdd-refresh-interval') || '60', 10),
     config: null,
     deployments: new Map(),
+    driftDetails: new Map(), // Map<serviceKey, { aheadBy: number, behindBy: number }>
     loading: false,
     errors: [],
     filterText: '',
@@ -603,6 +604,68 @@
   }
 
   // ============================================================
+  // DRIFT DETAILS (commit distance via compare API)
+  // ============================================================
+  async function fetchDriftDetails(token, config, deployments) {
+    const details = new Map();
+    const tasks = [];
+
+    for (const service of config.services) {
+      const deps = deployments.get(service.key);
+      if (!deps || deps.size < 2) continue;
+
+      // Find first and last env with successful deployments
+      let firstDep = null;
+      let lastDep = null;
+      for (const env of config.environments) {
+        const dep = deps.get(env);
+        if (dep && dep.status === 'success') {
+          if (!firstDep) firstDep = dep;
+          lastDep = dep;
+        }
+      }
+
+      if (!firstDep || !lastDep || firstDep.sha === lastDep.sha) continue;
+
+      tasks.push({
+        key: service.key,
+        owner: service.owner,
+        repo: service.repo,
+        baseSha: lastDep.sha,  // prod (behind)
+        headSha: firstDep.sha, // dev (ahead)
+      });
+    }
+
+    const CONCURRENCY = 6;
+    for (let i = 0; i < tasks.length; i += CONCURRENCY) {
+      const batch = tasks.slice(i, i + CONCURRENCY);
+      const settled = await Promise.allSettled(
+        batch.map(async (task) => {
+          const url =
+            'https://api.github.com/repos/' +
+            encodeURIComponent(task.owner) + '/' +
+            encodeURIComponent(task.repo) +
+            '/compare/' + task.baseSha + '...' + task.headSha;
+          const data = await apiFetch(url, token);
+          return { key: task.key, aheadBy: data.ahead_by || 0, behindBy: data.behind_by || 0 };
+        })
+      );
+
+      for (const result of settled) {
+        if (result.status === 'fulfilled') {
+          details.set(result.value.key, {
+            aheadBy: result.value.aheadBy,
+            behindBy: result.value.behindBy,
+          });
+        }
+        // Silently ignore failures — drift badge still shows, just without count
+      }
+    }
+
+    return details;
+  }
+
+  // ============================================================
   // DRIFT DETECTION
   // ============================================================
   function detectDrift(serviceDeployments, environments) {
@@ -712,7 +775,12 @@
       html += '<td class="service-name">';
       html += escapeHtml(service.displayName);
       if (drift.hasDrift) {
-        html += '<span class="drift-badge">drift</span>';
+        const dd = state.driftDetails.get(service.key);
+        const label = dd && dd.aheadBy > 0 ? 'drift +' + dd.aheadBy : 'drift';
+        const title = dd && dd.aheadBy > 0
+          ? dd.aheadBy + ' commit' + (dd.aheadBy === 1 ? '' : 's') + ' in ' + drift.firstEnv + ' not in ' + drift.lastEnv
+          : drift.firstEnv + ' and ' + drift.lastEnv + ' have different commits';
+        html += '<span class="drift-badge" title="' + escapeHtml(title) + '">' + escapeHtml(label) + '</span>';
       }
       if (service.monoRepoService) {
         html += '<span class="mono-label">' + escapeHtml(service.repo) + '</span>';
@@ -878,6 +946,10 @@
 
     renderTable(state.config, state.deployments);
     renderErrors(state.errors);
+
+    // Fetch commit distance for drifted services (non-blocking update)
+    state.driftDetails = await fetchDriftDetails(state.token, state.config, state.deployments);
+    renderTable(state.config, state.deployments);
   }
 
   function startAutoRefresh() {
