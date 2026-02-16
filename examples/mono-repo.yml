@@ -34,6 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       deployments: write
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -47,6 +48,9 @@ jobs:
           environment: staging
           service: auth-module
           version: v1.2.3
+          # For mono-repo with dashboard in same repo:
+          # dashboard-repo: your-org/your-monorepo
+          # dashboard-branch: gh-pages
 
   deploy-billing:
     needs: detect-changes
@@ -54,6 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       deployments: write
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -67,3 +72,5 @@ jobs:
           environment: staging
           service: billing-module
           version: v2.0.0
+          # dashboard-repo: your-org/your-monorepo
+          # dashboard-branch: gh-pages

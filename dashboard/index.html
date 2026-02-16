@@ -31,7 +31,6 @@
       min-height: 100vh;
     }
 
-    /* Setup Panel */
     .setup-panel {
       max-width: 540px;
       margin: 80px auto;
@@ -40,328 +39,161 @@
       border: 1px solid var(--border);
       border-radius: 12px;
     }
-    .setup-panel h1 {
-      font-size: 24px;
-      margin-bottom: 24px;
-      font-weight: 600;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
+    .setup-panel h1 { font-size: 24px; margin-bottom: 24px; font-weight: 600; }
+    .form-group { margin-bottom: 20px; }
     .form-group label {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 6px;
-      color: var(--text-primary);
+      display: block; font-size: 14px; font-weight: 500;
+      margin-bottom: 6px; color: var(--text-primary);
     }
-    .form-group small {
-      display: block;
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
+    .form-group small { display: block; font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
     input[type="text"], input[type="password"], input[type="url"], textarea, select {
-      width: 100%;
-      padding: 8px 12px;
-      font-size: 14px;
-      background: var(--bg-primary);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text-primary);
-      font-family: inherit;
+      width: 100%; padding: 8px 12px; font-size: 14px;
+      background: var(--bg-primary); border: 1px solid var(--border);
+      border-radius: 6px; color: var(--text-primary); font-family: inherit;
     }
     input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: var(--blue);
+      outline: none; border-color: var(--blue);
       box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.3);
     }
     textarea { resize: vertical; }
 
     .tab-group {
-      display: flex;
-      gap: 0;
-      margin-bottom: 8px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
+      display: flex; gap: 0; margin-bottom: 8px;
+      border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
     }
     .tab {
-      flex: 1;
-      padding: 6px 12px;
-      font-size: 13px;
-      background: var(--bg-tertiary);
-      color: var(--text-secondary);
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
+      flex: 1; padding: 6px 12px; font-size: 13px;
+      background: var(--bg-tertiary); color: var(--text-secondary);
+      border: none; cursor: pointer; font-family: inherit;
     }
-    .tab.active {
-      background: var(--blue);
-      color: #fff;
-    }
+    .tab.active { background: var(--blue); color: #fff; }
 
     .btn-primary {
-      display: inline-block;
-      padding: 8px 20px;
-      font-size: 14px;
-      font-weight: 500;
-      background: #238636;
-      color: #fff;
-      border: 1px solid rgba(240, 246, 252, 0.1);
-      border-radius: 6px;
-      cursor: pointer;
-      font-family: inherit;
+      display: inline-block; padding: 8px 20px; font-size: 14px; font-weight: 500;
+      background: #238636; color: #fff;
+      border: 1px solid rgba(240, 246, 252, 0.1); border-radius: 6px;
+      cursor: pointer; font-family: inherit;
     }
     .btn-primary:hover { background: #2ea043; }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .btn-secondary {
-      display: inline-block;
-      padding: 6px 14px;
-      font-size: 13px;
-      background: var(--bg-tertiary);
-      color: var(--text-primary);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      cursor: pointer;
-      font-family: inherit;
+      display: inline-block; padding: 6px 14px; font-size: 13px;
+      background: var(--bg-tertiary); color: var(--text-primary);
+      border: 1px solid var(--border); border-radius: 6px;
+      cursor: pointer; font-family: inherit;
     }
     .btn-secondary:hover { background: var(--border); }
 
     .error-msg {
-      margin-top: 12px;
-      padding: 10px 14px;
-      background: rgba(248, 81, 73, 0.1);
-      border: 1px solid rgba(248, 81, 73, 0.4);
-      border-radius: 6px;
-      color: var(--red);
-      font-size: 13px;
+      margin-top: 12px; padding: 10px 14px;
+      background: rgba(248, 81, 73, 0.1); border: 1px solid rgba(248, 81, 73, 0.4);
+      border-radius: 6px; color: var(--red); font-size: 13px;
     }
+
+    .mode-badge {
+      display: inline-block; font-size: 11px; font-weight: 500;
+      padding: 2px 8px; border-radius: 10px; margin-left: 10px; vertical-align: middle;
+    }
+    .mode-badge--static { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+    .mode-badge--api { background: rgba(88, 166, 255, 0.15); color: var(--blue); }
 
     .hidden { display: none !important; }
 
-    /* Dashboard */
-    .dashboard {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px 24px;
-    }
+    .dashboard { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
     .dashboard header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px; margin-bottom: 20px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--border);
     }
-    .dashboard header h1 {
-      font-size: 20px;
-      font-weight: 600;
-    }
-    .controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .dashboard header h1 { font-size: 20px; font-weight: 600; }
+    .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .controls input[type="text"] { width: 200px; }
     .controls select { width: auto; }
+    .refresh-info { font-size: 12px; color: var(--text-secondary); min-width: 60px; text-align: right; }
 
-    .refresh-info {
-      font-size: 12px;
-      color: var(--text-secondary);
-      min-width: 60px;
-      text-align: right;
-    }
-
-    /* Matrix Table */
     .table-container {
-      overflow-x: auto;
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      overflow-x: auto; border: 1px solid var(--border); border-radius: 8px;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
     thead th {
-      position: sticky;
-      top: 0;
-      background: var(--bg-tertiary);
-      padding: 10px 16px;
-      text-align: left;
-      font-weight: 600;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
+      position: sticky; top: 0; background: var(--bg-tertiary);
+      padding: 10px 16px; text-align: left; font-weight: 600;
+      font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--text-secondary); border-bottom: 1px solid var(--border); white-space: nowrap;
     }
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-    }
+    tbody tr { border-bottom: 1px solid var(--border); }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: rgba(136, 149, 167, 0.04); }
-
-    td {
-      padding: 10px 16px;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
-    td.service-name {
-      font-weight: 500;
-      min-width: 160px;
-    }
+    td { padding: 10px 16px; vertical-align: middle; white-space: nowrap; }
+    td.service-name { font-weight: 500; min-width: 160px; }
     td.service-name .mono-label {
-      display: block;
-      font-size: 11px;
-      color: var(--text-secondary);
-      font-weight: 400;
+      display: block; font-size: 11px; color: var(--text-secondary); font-weight: 400;
     }
 
-    /* Deployment Cell */
     .cell { min-width: 140px; }
     .cell a {
-      color: var(--text-link);
-      text-decoration: none;
+      color: var(--text-link); text-decoration: none;
       font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
       font-size: 13px;
     }
     .cell a:hover { text-decoration: underline; }
-    .cell .time {
-      display: block;
-      font-size: 11px;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
+    .cell .time { display: block; font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
     .cell .status-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      margin-right: 6px;
-      vertical-align: middle;
+      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      margin-right: 6px; vertical-align: middle;
     }
     .status-success { background: var(--green); }
     .status-failure, .status-error { background: var(--red); }
     .status-pending, .status-queued, .status-in_progress { background: var(--yellow); }
     .status-inactive { background: var(--text-secondary); }
     .status-unknown { background: var(--border); }
+    .cell--empty { color: var(--text-secondary); font-size: 13px; }
+    .cell .env-link {
+      display: inline-block; margin-left: 4px; color: var(--text-secondary);
+      text-decoration: none; font-size: 11px; vertical-align: middle;
+    }
+    .cell .env-link:hover { color: var(--text-link); }
 
-    .cell--empty {
-      color: var(--text-secondary);
-      font-size: 13px;
-    }
-
-    /* Drift */
-    tr.drift {
-      background: rgba(219, 109, 40, 0.06);
-    }
-    tr.drift td:first-child {
-      border-left: 3px solid var(--orange);
-    }
+    tr.drift { background: rgba(219, 109, 40, 0.06); }
+    tr.drift td:first-child { border-left: 3px solid var(--orange); }
     .drift-badge {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--orange);
-      background: rgba(219, 109, 40, 0.15);
-      padding: 1px 6px;
-      border-radius: 10px;
-      margin-left: 8px;
-      vertical-align: middle;
+      display: inline-block; font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px; color: var(--orange);
+      background: rgba(219, 109, 40, 0.15); padding: 1px 6px;
+      border-radius: 10px; margin-left: 8px; vertical-align: middle;
     }
 
-    /* Skeleton loading */
     .skeleton {
       background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--border) 50%, var(--bg-tertiary) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 4px;
-      height: 14px;
-      margin-bottom: 4px;
+      background-size: 200% 100%; animation: shimmer 1.5s infinite;
+      border-radius: 4px; height: 14px; margin-bottom: 4px;
     }
     .skeleton--sha { width: 70px; }
     .skeleton--time { width: 50px; height: 10px; }
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-    /* Error banner */
     .error-banner {
-      margin-top: 12px;
-      padding: 10px 14px;
-      background: rgba(248, 81, 73, 0.1);
-      border: 1px solid rgba(248, 81, 73, 0.4);
-      border-radius: 6px;
-      color: var(--red);
-      font-size: 13px;
+      margin-top: 12px; padding: 10px 14px;
+      background: rgba(248, 81, 73, 0.1); border: 1px solid rgba(248, 81, 73, 0.4);
+      border-radius: 6px; color: var(--red); font-size: 13px;
     }
     .error-banner .dismiss {
-      float: right;
-      cursor: pointer;
-      color: var(--text-secondary);
-      font-size: 16px;
-      line-height: 1;
-      border: none;
-      background: none;
+      float: right; cursor: pointer; color: var(--text-secondary);
+      font-size: 16px; line-height: 1; border: none; background: none;
     }
 
-    /* Summary bar */
     .summary-bar {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
-      padding: 10px 16px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 13px;
-      color: var(--text-secondary);
+      display: flex; gap: 16px; margin-bottom: 16px; padding: 10px 16px;
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 8px; font-size: 13px; color: var(--text-secondary);
     }
-    .summary-bar .stat {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .summary-bar .stat-value {
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .summary-bar .stat-value--drift {
-      color: var(--orange);
-    }
-    .summary-bar .stat-value--ok {
-      color: var(--green);
-    }
+    .summary-bar .stat { display: flex; align-items: center; gap: 6px; }
+    .summary-bar .stat-value { font-weight: 600; color: var(--text-primary); }
+    .summary-bar .stat-value--drift { color: var(--orange); }
+    .summary-bar .stat-value--ok { color: var(--green); }
 
-    /* Env URL link */
-    .cell .env-link {
-      display: inline-block;
-      margin-left: 4px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 11px;
-      vertical-align: middle;
-    }
-    .cell .env-link:hover {
-      color: var(--text-link);
-    }
-
-    /* Empty state */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-secondary);
-    }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
     .empty-state h2 { font-size: 18px; margin-bottom: 8px; color: var(--text-primary); }
   </style>
 </head>
@@ -371,7 +203,16 @@
   <div id="setup" class="setup-panel">
     <h1>Deploy Dashboard</h1>
 
-    <div class="form-group">
+    <div id="mode-section" class="form-group">
+      <label>Data Source</label>
+      <div class="tab-group">
+        <button class="tab active" id="mode-static">Static Files</button>
+        <button class="tab" id="mode-api">GitHub API</button>
+      </div>
+      <small id="mode-hint">Static mode reads status files pushed by the deploy action. No token needed.</small>
+    </div>
+
+    <div id="token-group" class="form-group hidden">
       <label for="token-input">GitHub Token (PAT)</label>
       <input type="password" id="token-input" placeholder="ghp_...">
       <small>Stored in localStorage. Needs <code>repo</code> scope or fine-grained <code>deployments:read</code> on target repos.</small>
@@ -382,14 +223,16 @@
       <div class="tab-group">
         <button class="tab active" data-tab="url" id="tab-url">URL</button>
         <button class="tab" data-tab="paste" id="tab-paste">Paste YAML</button>
+        <button class="tab" data-tab="auto" id="tab-auto">Auto-detect</button>
       </div>
-      <input type="url" id="config-url" placeholder="https://raw.githubusercontent.com/org/repo/main/.deploy-dashboard.yml">
+      <input type="url" id="config-url" class="hidden" placeholder="https://raw.githubusercontent.com/org/repo/main/.deploy-dashboard.yml">
       <textarea id="config-yaml" class="hidden" rows="12" placeholder="org: your-org&#10;environments:&#10;  - dev&#10;  - staging&#10;  - prod&#10;services:&#10;  - repo: my-service"></textarea>
+      <small id="auto-hint" class="">Looks for .deploy-dashboard.yml next to this page.</small>
     </div>
 
     <div class="form-group">
       <label for="refresh-input">Refresh interval (seconds)</label>
-      <input type="text" id="refresh-input" value="60" style="width:80px">
+      <input type="text" id="refresh-input" value="30" style="width:80px">
     </div>
 
     <button id="btn-load" class="btn-primary">Load Dashboard</button>
@@ -399,7 +242,9 @@
   <!-- Dashboard -->
   <div id="dashboard" class="dashboard hidden">
     <header>
-      <h1>Deploy Dashboard &mdash; <span id="org-name"></span></h1>
+      <h1>Deploy Dashboard &mdash; <span id="org-name"></span>
+        <span id="mode-indicator" class="mode-badge"></span>
+      </h1>
       <div class="controls">
         <input type="text" id="filter-input" placeholder="Filter services...">
         <select id="sort-select">
@@ -426,14 +271,15 @@
   // STATE
   // ============================================================
   const state = {
+    dataMode: localStorage.getItem('ghdd-data-mode') || 'static', // 'static' or 'api'
     token: localStorage.getItem('ghdd-token') || '',
-    configSource: localStorage.getItem('ghdd-config-source') || 'url',
+    configTab: localStorage.getItem('ghdd-config-tab') || 'auto', // 'url', 'paste', 'auto'
     configUrl: localStorage.getItem('ghdd-config-url') || '',
     configYaml: localStorage.getItem('ghdd-config-yaml') || '',
-    refreshInterval: parseInt(localStorage.getItem('ghdd-refresh-interval') || '60', 10),
+    refreshInterval: parseInt(localStorage.getItem('ghdd-refresh-interval') || '30', 10),
     config: null,
     deployments: new Map(),
-    driftDetails: new Map(), // Map<serviceKey, { aheadBy: number, behindBy: number }>
+    driftDetails: new Map(),
     loading: false,
     errors: [],
     filterText: '',
@@ -448,15 +294,22 @@
   const $ = (sel) => document.querySelector(sel);
   const setupEl = $('#setup');
   const dashboardEl = $('#dashboard');
+  const modeStatic = $('#mode-static');
+  const modeApi = $('#mode-api');
+  const modeHint = $('#mode-hint');
+  const tokenGroup = $('#token-group');
   const tokenInput = $('#token-input');
-  const configUrlInput = $('#config-url');
-  const configYamlInput = $('#config-yaml');
-  const refreshInput = $('#refresh-input');
   const tabUrl = $('#tab-url');
   const tabPaste = $('#tab-paste');
+  const tabAuto = $('#tab-auto');
+  const configUrlInput = $('#config-url');
+  const configYamlInput = $('#config-yaml');
+  const autoHint = $('#auto-hint');
+  const refreshInput = $('#refresh-input');
   const btnLoad = $('#btn-load');
   const setupError = $('#setup-error');
   const orgName = $('#org-name');
+  const modeIndicator = $('#mode-indicator');
   const filterInput = $('#filter-input');
   const sortSelect = $('#sort-select');
   const refreshCountdown = $('#refresh-countdown');
@@ -487,7 +340,6 @@
       }
 
       if (entry.services && Array.isArray(entry.services)) {
-        // Mono-repo: expand sub-services
         for (const sub of entry.services) {
           config.services.push({
             key: entry.repo + '/' + sub.name,
@@ -512,7 +364,62 @@
   }
 
   // ============================================================
-  // GITHUB API
+  // STATIC FILE FETCHER
+  // ============================================================
+  async function fetchAllDeploymentsStatic(config) {
+    const results = new Map();
+    const errors = [];
+
+    const fetches = [];
+    for (const service of config.services) {
+      const serviceName = service.monoRepoService || service.repo;
+      for (const env of config.environments) {
+        fetches.push({ service, env, serviceName });
+      }
+    }
+
+    const settled = await Promise.allSettled(
+      fetches.map(async ({ service, env, serviceName }) => {
+        const url = 'status/' + encodeURIComponent(serviceName) + '/' + encodeURIComponent(env) + '.json';
+        const resp = await fetch(url);
+        if (resp.status === 404) return { key: service.key, env, data: null };
+        if (!resp.ok) throw new Error(service.key + '/' + env + ': HTTP ' + resp.status);
+        const data = await resp.json();
+        return {
+          key: service.key,
+          env,
+          data: {
+            id: null,
+            sha: data.sha,
+            ref: data.ref,
+            environment: data.environment || env,
+            createdAt: data.timestamp,
+            status: data.status || 'unknown',
+            environmentUrl: data.environment_url || null,
+            description: data.description || null,
+            version: data.version || null,
+            repoOwner: data.owner || service.owner,
+            repoName: data.repo || service.repo,
+          },
+        };
+      })
+    );
+
+    for (const result of settled) {
+      if (result.status === 'fulfilled' && result.value.data) {
+        const { key, env, data } = result.value;
+        if (!results.has(key)) results.set(key, new Map());
+        results.get(key).set(env, data);
+      } else if (result.status === 'rejected') {
+        errors.push(result.reason.message || 'Unknown fetch error');
+      }
+    }
+
+    return { results, errors };
+  }
+
+  // ============================================================
+  // GITHUB API FETCHER
   // ============================================================
   async function apiFetch(url, token) {
     const resp = await fetch(url, {
@@ -544,7 +451,6 @@
       throw new Error(service.key + '/' + environment + ': ' + err.message);
     }
 
-    // Find matching deployment
     let deployment = null;
     for (const d of deployments) {
       if (service.monoRepoService) {
@@ -554,9 +460,7 @@
             deployment = d;
             break;
           }
-        } catch (_) {
-          continue;
-        }
+        } catch (_) { continue; }
       } else {
         deployment = d;
         break;
@@ -565,7 +469,6 @@
 
     if (!deployment) return null;
 
-    // Fetch latest status
     let statusState = 'unknown';
     let envUrl = null;
     let statusDesc = deployment.description;
@@ -581,11 +484,8 @@
         envUrl = statuses[0].environment_url || null;
         statusDesc = statuses[0].description || statusDesc;
       }
-    } catch (_) {
-      // Status fetch failed; proceed with unknown status
-    }
+    } catch (_) {}
 
-    // Parse version from payload
     let version = null;
     try {
       const payload = typeof deployment.payload === 'string'
@@ -608,7 +508,7 @@
     };
   }
 
-  async function fetchAllDeployments(token, config) {
+  async function fetchAllDeploymentsApi(token, config) {
     const tasks = [];
     for (const service of config.services) {
       for (const env of config.environments) {
@@ -625,9 +525,7 @@
       const settled = await Promise.allSettled(
         batch.map(({ service, env }) =>
           fetchDeploymentForService(token, service, env).then((data) => ({
-            key: service.key,
-            env,
-            data,
+            key: service.key, env, data,
           }))
         )
       );
@@ -647,9 +545,11 @@
   }
 
   // ============================================================
-  // DRIFT DETAILS (commit distance via compare API)
+  // DRIFT DETAILS (commit distance via compare API — API mode only)
   // ============================================================
   async function fetchDriftDetails(token, config, deployments) {
+    if (!token) return new Map();
+
     const details = new Map();
     const tasks = [];
 
@@ -657,7 +557,6 @@
       const deps = deployments.get(service.key);
       if (!deps || deps.size < 2) continue;
 
-      // Find first and last env with successful deployments
       let firstDep = null;
       let lastDep = null;
       for (const env of config.environments) {
@@ -671,11 +570,8 @@
       if (!firstDep || !lastDep || firstDep.sha === lastDep.sha) continue;
 
       tasks.push({
-        key: service.key,
-        owner: service.owner,
-        repo: service.repo,
-        baseSha: lastDep.sha,  // prod (behind)
-        headSha: firstDep.sha, // dev (ahead)
+        key: service.key, owner: service.owner, repo: service.repo,
+        baseSha: lastDep.sha, headSha: firstDep.sha,
       });
     }
 
@@ -701,7 +597,6 @@
             behindBy: result.value.behindBy,
           });
         }
-        // Silently ignore failures — drift badge still shows, just without count
       }
     }
 
@@ -712,35 +607,23 @@
   // DRIFT DETECTION
   // ============================================================
   function detectDrift(serviceDeployments, environments) {
-    if (!serviceDeployments || serviceDeployments.size < 2) {
-      return { hasDrift: false };
-    }
+    if (!serviceDeployments || serviceDeployments.size < 2) return { hasDrift: false };
 
-    let firstSha = null;
-    let lastSha = null;
-    let firstEnv = null;
-    let lastEnv = null;
+    let firstSha = null, lastSha = null, firstEnv = null, lastEnv = null;
 
     for (const env of environments) {
       const dep = serviceDeployments.get(env);
       if (dep && dep.status === 'success') {
-        if (firstSha === null) {
-          firstSha = dep.sha;
-          firstEnv = env;
-        }
-        lastSha = dep.sha;
-        lastEnv = env;
+        if (firstSha === null) { firstSha = dep.sha; firstEnv = env; }
+        lastSha = dep.sha; lastEnv = env;
       }
     }
 
-    if (!firstSha || !lastSha || firstEnv === lastEnv) {
-      return { hasDrift: false };
-    }
+    if (!firstSha || !lastSha || firstEnv === lastEnv) return { hasDrift: false };
 
     return {
       hasDrift: firstSha !== lastSha,
-      firstEnv,
-      lastEnv,
+      firstEnv, lastEnv,
       firstSha: firstSha.substring(0, 7),
       lastSha: lastSha.substring(0, 7),
     };
@@ -770,8 +653,7 @@
 
   function renderSummary(config, deployments) {
     const total = config.services.length;
-    let driftCount = 0;
-    let failCount = 0;
+    let driftCount = 0, failCount = 0;
 
     for (const service of config.services) {
       const deps = deployments.get(service.key);
@@ -784,14 +666,10 @@
       }
     }
 
-    if (total === 0) {
-      summaryBar.classList.add('hidden');
-      return;
-    }
+    if (total === 0) { summaryBar.classList.add('hidden'); return; }
 
     const okCount = total - driftCount;
     let html = '<span class="stat"><span class="stat-value">' + total + '</span> services</span>';
-
     if (driftCount > 0) {
       html += '<span class="stat"><span class="stat-value stat-value--drift">' + driftCount + '</span> drifted</span>';
     }
@@ -807,23 +685,18 @@
   function renderTable(config, deployments) {
     let services = [...config.services];
 
-    // Filter
     if (state.filterText) {
       const q = state.filterText.toLowerCase();
       services = services.filter(
-        (s) =>
-          s.displayName.toLowerCase().includes(q) ||
-          s.key.toLowerCase().includes(q)
+        (s) => s.displayName.toLowerCase().includes(q) || s.key.toLowerCase().includes(q)
       );
     }
 
-    // Compute drift for each service
     const driftMap = new Map();
     for (const s of services) {
       driftMap.set(s.key, detectDrift(deployments.get(s.key), config.environments));
     }
 
-    // Sort
     if (state.sortMode === 'name') {
       services.sort((a, b) => a.displayName.localeCompare(b.displayName));
     } else if (state.sortMode === 'drift') {
@@ -850,7 +723,6 @@
       const drift = driftMap.get(service.key);
       html += '<tr' + (drift.hasDrift ? ' class="drift"' : '') + '>';
 
-      // Service name cell
       html += '<td class="service-name">';
       html += escapeHtml(service.displayName);
       if (drift.hasDrift) {
@@ -866,7 +738,6 @@
       }
       html += '</td>';
 
-      // Environment cells
       for (const env of config.environments) {
         const deps = deployments.get(service.key);
         const dep = deps ? deps.get(env) : null;
@@ -875,8 +746,7 @@
           html += '<td class="cell"><div class="skeleton skeleton--sha"></div><div class="skeleton skeleton--time"></div></td>';
         } else if (dep) {
           const shortSha = dep.sha.substring(0, 7);
-          const commitUrl =
-            'https://github.com/' + dep.repoOwner + '/' + dep.repoName + '/commit/' + dep.sha;
+          const commitUrl = 'https://github.com/' + dep.repoOwner + '/' + dep.repoName + '/commit/' + dep.sha;
           const displayVersion = dep.version && dep.version !== shortSha ? dep.version : null;
 
           html += '<td class="cell">';
@@ -902,19 +772,14 @@
   }
 
   function renderErrors(errors) {
-    if (!errors.length) {
-      errorContainer.innerHTML = '';
-      return;
-    }
-    // Deduplicate and show max 5
+    if (!errors.length) { errorContainer.innerHTML = ''; return; }
     const unique = [...new Set(errors)].slice(0, 5);
     let html = '';
     for (const msg of unique) {
       html +=
         '<div class="error-banner">' +
         '<button class="dismiss" onclick="this.parentElement.remove()">&times;</button>' +
-        escapeHtml(msg) +
-        '</div>';
+        escapeHtml(msg) + '</div>';
     }
     errorContainer.innerHTML = html;
   }
@@ -922,6 +787,40 @@
   // ============================================================
   // CONTROLLER
   // ============================================================
+  function updateSetupUI() {
+    // Data mode
+    if (state.dataMode === 'static') {
+      modeStatic.classList.add('active');
+      modeApi.classList.remove('active');
+      tokenGroup.classList.add('hidden');
+      modeHint.textContent = 'Static mode reads status files pushed by the deploy action. No token needed.';
+    } else {
+      modeApi.classList.add('active');
+      modeStatic.classList.remove('active');
+      tokenGroup.classList.remove('hidden');
+      modeHint.textContent = 'API mode queries the GitHub Deployments API directly. Requires a token.';
+    }
+
+    // Config tab
+    tabUrl.classList.remove('active');
+    tabPaste.classList.remove('active');
+    tabAuto.classList.remove('active');
+    configUrlInput.classList.add('hidden');
+    configYamlInput.classList.add('hidden');
+    autoHint.classList.add('hidden');
+
+    if (state.configTab === 'url') {
+      tabUrl.classList.add('active');
+      configUrlInput.classList.remove('hidden');
+    } else if (state.configTab === 'paste') {
+      tabPaste.classList.add('active');
+      configYamlInput.classList.remove('hidden');
+    } else {
+      tabAuto.classList.add('active');
+      autoHint.classList.remove('hidden');
+    }
+  }
+
   function showSetup() {
     setupEl.classList.remove('hidden');
     dashboardEl.classList.add('hidden');
@@ -931,62 +830,62 @@
     configUrlInput.value = state.configUrl;
     configYamlInput.value = state.configYaml;
     refreshInput.value = state.refreshInterval;
-
-    if (state.configSource === 'paste') {
-      tabPaste.classList.add('active');
-      tabUrl.classList.remove('active');
-      configUrlInput.classList.add('hidden');
-      configYamlInput.classList.remove('hidden');
-    } else {
-      tabUrl.classList.add('active');
-      tabPaste.classList.remove('active');
-      configYamlInput.classList.add('hidden');
-      configUrlInput.classList.remove('hidden');
-    }
+    updateSetupUI();
   }
 
   function showDashboard() {
     setupEl.classList.add('hidden');
     dashboardEl.classList.remove('hidden');
+
+    if (state.dataMode === 'static') {
+      modeIndicator.textContent = 'static';
+      modeIndicator.className = 'mode-badge mode-badge--static';
+    } else {
+      modeIndicator.textContent = 'api';
+      modeIndicator.className = 'mode-badge mode-badge--api';
+    }
+  }
+
+  async function resolveConfig() {
+    if (state.configTab === 'url') {
+      const url = configUrlInput.value.trim();
+      if (!url) throw new Error('Please enter a config URL.');
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error('Failed to fetch config: HTTP ' + resp.status);
+      return resp.text();
+    } else if (state.configTab === 'paste') {
+      const yaml = configYamlInput.value.trim();
+      if (!yaml) throw new Error('Please paste your YAML config.');
+      return yaml;
+    } else {
+      // Auto-detect: try .deploy-dashboard.yml next to this page
+      const resp = await fetch('.deploy-dashboard.yml');
+      if (!resp.ok) throw new Error('No .deploy-dashboard.yml found next to this page. Use URL or Paste instead.');
+      return resp.text();
+    }
   }
 
   async function loadConfig() {
     state.token = tokenInput.value.trim();
     state.configUrl = configUrlInput.value.trim();
     state.configYaml = configYamlInput.value.trim();
-    state.refreshInterval = Math.max(10, parseInt(refreshInput.value, 10) || 60);
+    state.refreshInterval = Math.max(10, parseInt(refreshInput.value, 10) || 30);
 
-    if (!state.token) {
-      showError('Please enter a GitHub token.');
+    if (state.dataMode === 'api' && !state.token) {
+      showError('API mode requires a GitHub token.');
       return;
     }
 
-    const useUrl = state.configSource === 'url';
-    let yamlText = '';
-
-    if (useUrl) {
-      if (!state.configUrl) {
-        showError('Please enter a config URL.');
-        return;
-      }
-      try {
-        btnLoad.disabled = true;
-        btnLoad.textContent = 'Loading...';
-        const resp = await fetch(state.configUrl);
-        if (!resp.ok) throw new Error('HTTP ' + resp.status);
-        yamlText = await resp.text();
-      } catch (err) {
-        showError('Failed to fetch config: ' + err.message);
-        btnLoad.disabled = false;
-        btnLoad.textContent = 'Load Dashboard';
-        return;
-      }
-    } else {
-      yamlText = state.configYaml;
-      if (!yamlText) {
-        showError('Please paste your YAML config.');
-        return;
-      }
+    let yamlText;
+    try {
+      btnLoad.disabled = true;
+      btnLoad.textContent = 'Loading...';
+      yamlText = await resolveConfig();
+    } catch (err) {
+      showError(err.message);
+      btnLoad.disabled = false;
+      btnLoad.textContent = 'Load Dashboard';
+      return;
     }
 
     try {
@@ -998,12 +897,16 @@
       return;
     }
 
-    // Persist settings
+    // Persist
+    localStorage.setItem('ghdd-data-mode', state.dataMode);
     localStorage.setItem('ghdd-token', state.token);
-    localStorage.setItem('ghdd-config-source', state.configSource);
+    localStorage.setItem('ghdd-config-tab', state.configTab);
     localStorage.setItem('ghdd-config-url', state.configUrl);
-    localStorage.setItem('ghdd-config-yaml', useUrl ? yamlText : state.configYaml);
+    localStorage.setItem('ghdd-config-yaml', state.configTab === 'auto' ? yamlText : state.configYaml);
     localStorage.setItem('ghdd-refresh-interval', String(state.refreshInterval));
+
+    // Always store the resolved yaml for auto-reload
+    state.configYaml = yamlText;
 
     btnLoad.disabled = false;
     btnLoad.textContent = 'Load Dashboard';
@@ -1021,7 +924,13 @@
     state.errors = [];
     renderTable(state.config, state.deployments);
 
-    const { results, errors } = await fetchAllDeployments(state.token, state.config);
+    let results, errors;
+    if (state.dataMode === 'static') {
+      ({ results, errors } = await fetchAllDeploymentsStatic(state.config));
+    } else {
+      ({ results, errors } = await fetchAllDeploymentsApi(state.token, state.config));
+    }
+
     state.deployments = results;
     state.loading = false;
     state.errors = errors;
@@ -1030,9 +939,11 @@
     renderSummary(state.config, state.deployments);
     renderErrors(state.errors);
 
-    // Fetch commit distance for drifted services (non-blocking update)
-    state.driftDetails = await fetchDriftDetails(state.token, state.config, state.deployments);
-    renderTable(state.config, state.deployments);
+    // Drift details via compare API (only in API mode with a token)
+    if (state.dataMode === 'api' && state.token) {
+      state.driftDetails = await fetchDriftDetails(state.token, state.config, state.deployments);
+      renderTable(state.config, state.deployments);
+    }
   }
 
   function startAutoRefresh() {
@@ -1051,40 +962,28 @@
   }
 
   function stopAutoRefresh() {
-    if (state.refreshTimer) {
-      clearInterval(state.refreshTimer);
-      state.refreshTimer = null;
-    }
+    if (state.refreshTimer) { clearInterval(state.refreshTimer); state.refreshTimer = null; }
     refreshCountdown.textContent = '';
   }
 
-  function showError(msg) {
-    setupError.textContent = msg;
-    setupError.classList.remove('hidden');
-  }
-
-  function hideError() {
-    setupError.classList.add('hidden');
-  }
+  function showError(msg) { setupError.textContent = msg; setupError.classList.remove('hidden'); }
+  function hideError() { setupError.classList.add('hidden'); }
 
   // ============================================================
   // EVENT LISTENERS
   // ============================================================
-  tabUrl.addEventListener('click', function () {
-    state.configSource = 'url';
-    tabUrl.classList.add('active');
-    tabPaste.classList.remove('active');
-    configUrlInput.classList.remove('hidden');
-    configYamlInput.classList.add('hidden');
+  modeStatic.addEventListener('click', function () {
+    state.dataMode = 'static';
+    updateSetupUI();
+  });
+  modeApi.addEventListener('click', function () {
+    state.dataMode = 'api';
+    updateSetupUI();
   });
 
-  tabPaste.addEventListener('click', function () {
-    state.configSource = 'paste';
-    tabPaste.classList.add('active');
-    tabUrl.classList.remove('active');
-    configYamlInput.classList.remove('hidden');
-    configUrlInput.classList.add('hidden');
-  });
+  tabUrl.addEventListener('click', function () { state.configTab = 'url'; updateSetupUI(); });
+  tabPaste.addEventListener('click', function () { state.configTab = 'paste'; updateSetupUI(); });
+  tabAuto.addEventListener('click', function () { state.configTab = 'auto'; updateSetupUI(); });
 
   btnLoad.addEventListener('click', loadConfig);
 
@@ -1109,21 +1008,15 @@
   // INIT
   // ============================================================
   (function init() {
-    // If we have saved settings, try to auto-load
-    if (state.token && (state.configUrl || state.configYaml)) {
-      const yamlText = state.configYaml;
-      if (yamlText) {
-        try {
-          state.config = parseConfig(yamlText);
-          orgName.textContent = state.config.org;
-          showDashboard();
-          refresh();
-          startAutoRefresh();
-          return;
-        } catch (_) {
-          // Fall through to setup
-        }
-      }
+    if (state.configYaml) {
+      try {
+        state.config = parseConfig(state.configYaml);
+        orgName.textContent = state.config.org;
+        showDashboard();
+        refresh();
+        startAutoRefresh();
+        return;
+      } catch (_) {}
     }
     showSetup();
   })();

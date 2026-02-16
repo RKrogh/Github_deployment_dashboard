@@ -30,6 +30,16 @@ inputs:
     description: 'GitHub token for API authentication.'
     required: true
     default: '${{ github.token }}'
+  dashboard-repo:
+    description: 'Repository to write status files to (e.g., "org/deploy-dashboard"). Enables push-based static dashboard mode. If not set, no status file is written.'
+    required: false
+  dashboard-branch:
+    description: 'Branch to write status files to in the dashboard repo.'
+    required: false
+    default: 'gh-pages'
+  dashboard-token:
+    description: 'Token with write access to the dashboard repo. Defaults to the main token input. Set this if the dashboard repo differs from the current repo.'
+    required: false
 
 outputs:
   deployment-id:

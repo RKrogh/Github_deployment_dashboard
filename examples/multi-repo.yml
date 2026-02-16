@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       deployments: write
+      contents: write # needed for dashboard-repo writes
     steps:
       - uses: actions/checkout@v4
 
@@ -32,12 +33,18 @@ jobs:
           # status: defaults to 'success'
           # token: defaults to ${{ github.token }}
 
+          # Push-based dashboard (optional — writes status files for the static dashboard)
+          # dashboard-repo: your-org/deploy-dashboard
+          # dashboard-branch: gh-pages
+          # dashboard-token: ${{ secrets.DASHBOARD_TOKEN }}
+
   deploy-prod:
     runs-on: ubuntu-latest
     needs: deploy-staging
     if: github.ref == 'refs/heads/main'
     permissions:
       deployments: write
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -51,3 +58,6 @@ jobs:
           environment: prod
           version: ${{ github.sha }}
           environment-url: https://my-service.example.com
+          # dashboard-repo: your-org/deploy-dashboard
+          # dashboard-branch: gh-pages
+          # dashboard-token: ${{ secrets.DASHBOARD_TOKEN }}
